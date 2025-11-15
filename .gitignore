@@ -1,0 +1,115 @@
+############################
+# 一般
+############################
+
+# ビルド成果物
+build/
+**/build/
+
+# ログ / 一時ファイル
+*.log
+*.tmp
+*.temp
+*.hprof
+
+# OSごとのゴミファイル
+.DS_Store
+Thumbs.db
+
+############################
+# Gradle
+############################
+
+.gradle/
+.gradle-cache/
+
+# ラッパースクリプト以外
+!gradlew
+!gradlew.bat
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+############################
+# Android / IntelliJ / Android Studio
+############################
+
+# IDE設定（プロジェクト固有のものを除外）
+.idea/
+*.iml
+
+# Android Studioのキャッシュ・履歴など
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/misc.xml
+.idea/gradle.xml
+
+# 実行構成
+.idea/runConfigurations/
+
+# Android captures (スクリーンショット・動画等)
+captures/
+
+# Kotlin/Java のビルド成果物
+out/
+bin/
+*.class
+
+############################
+# Android ビルド成果物
+############################
+
+# APK / AAB 等
+*.apk
+*.ap_
+*.aab
+
+# Dalvik / ART
+*.dex
+*.class
+
+# NDK / CMake / 外部ビルド
+.externalNativeBuild/
+.cxx/
+
+# Lint
+lint/intermediates/
+lint/generated/
+lint/outputs/
+lint/tmp/
+# Lintレポート(必要なら残す)
+*.lint
+
+############################
+# ローカル環境依存ファイル
+############################
+
+# ローカルのSDKパスなど（共有不要）
+local.properties
+
+# keystore / 署名関連（絶対にコミットしない）
+*.jks
+*.keystore
+*.pem
+key.properties
+
+############################
+# Jetpack Compose / テンポラリ
+############################
+
+# Compose プレビューや一時ファイルで生成されることがあるもの
+.idea/deploymentTargetDropDown.xml
+.idea/androidTestResultsUserPreferences.xml
+
+############################
+# その他(必要に応じて)
+############################
+
+# テストレポートなど（必要ならコメントアウト）
+test-results/
+reports/
+
+# もしスクリプトやツール用の一時ファイルを作るならここに追記
