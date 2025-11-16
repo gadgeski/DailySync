@@ -1,5 +1,6 @@
 ```
 dailysync/
+├── Readme.md
 ├── STRUCTURE.md
 ├── app
 │   ├── build.gradle.kts
@@ -17,15 +18,38 @@ dailysync/
 │       │   │   └── com
 │       │   │       └── example
 │       │   │           └── dailysync
+│       │   │               ├── DailySyncApplication.kt
 │       │   │               ├── MainActivity.kt
 │       │   │               ├── data
 │       │   │               │   ├── DailyReportRepository.kt
-│       │   │               │   └── InMemoryDailyReportRepository.kt
+│       │   │               │   ├── InMemoryDailyReportRepository.kt
+│       │   │               │   ├── RoomDailyReportRepository.kt
+│       │   │               │   ├── export
+│       │   │               │   │   └── MarkdownDailyReportExporter.kt
+│       │   │               │   ├── local
+│       │   │               │   │   ├── Converters.kt
+│       │   │               │   │   ├── DailyReportDao.kt
+│       │   │               │   │   ├── DailyReportEntity.kt
+│       │   │               │   │   └── DailySyncDatabase.kt
+│       │   │               │   ├── mapper
+│       │   │               │   │   └── DailyReportMapper.kt
+│       │   │               │   └── reminder
+│       │   │               │       ├── AndroidReminderScheduler.kt
+│       │   │               │       └── DailySyncReminderReceiver.kt
+│       │   │               ├── di
+│       │   │               │   └── AppModule.kt
 │       │   │               ├── domain
 │       │   │               │   ├── DailyReport.kt
+│       │   │               │   ├── export
+│       │   │               │   │   └── DailyReportExporter.kt
+│       │   │               │   ├── reminder
+│       │   │               │   │   └── ReminderScheduler.kt
 │       │   │               │   └── usecase
 │       │   │               │       ├── CreateDailyReportUseCase.kt
-│       │   │               │       └── ObserveDailyReportsUseCase.kt
+│       │   │               │       ├── ExportDailyReportsUseCase.kt
+│       │   │               │       ├── FilterDailyReportsUseCase.kt
+│       │   │               │       ├── ObserveDailyReportsUseCase.kt
+│       │   │               │       └── ScheduleDailyReminderUseCase.kt
 │       │   │               ├── presentation
 │       │   │               │   ├── DailySyncScreen.kt
 │       │   │               │   └── DailySyncViewModel.kt
@@ -81,5 +105,5 @@ dailysync/
 ├── local.properties
 └── settings.gradle.kts
 
-36 directories, 45 files
+43 directories, 62 files
 ```
