@@ -1,3 +1,4 @@
+// data/DailyReportRepository.kt
 package com.example.dailysync.data
 
 import com.example.dailysync.domain.DailyReport
