@@ -1,3 +1,4 @@
+// MainActivity.kt
 package com.example.dailysync
 
 import android.os.Bundle
@@ -10,7 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.dailysync.presentation.DailySyncScreen
 
+// ★ 追加: Hilt 用のアノテーション import
+import dagger.hilt.android.AndroidEntryPoint
+
+// ★ 追加: Hilt にこの Activity を認識させるためのアノテーション
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
