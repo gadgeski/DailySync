@@ -1,11 +1,13 @@
 // app/build.gradle(.kts)
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
     // ★ 追加: Hilt 用プラグイン
-    id("com.google.dagger.hilt.android") version "2.57.1" apply false
+    id("com.google.dagger.hilt.android")
 
     // ★ 追加: Room / Hilt のコンパイラ用（kapt）
     kotlin("kapt")
@@ -44,16 +46,19 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-
     buildFeatures {
         compose = true
     }
 
     // ★ （必要なら）Compose Compiler のバージョン指定などをここに追加してもよい
 }
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
+    }
+}
+
 
 dependencies {
     // --- 既存の依存関係（Compose / 基本ライブラリ） ---
@@ -77,19 +82,19 @@ dependencies {
 
     // --- ★ 追加: Compose から viewModel() を使うための依存 ---
     // DailySyncScreen で `viewModel()` を使うため
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4")
 
     // --- ★ 追加: Room（DB 永続化） ---
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-runtime:2.8.3")
+    implementation("androidx.room:room-ktx:2.8.3")
+    kapt("androidx.room:room-compiler:2.8.3")
 
     // --- ★ 追加: Hilt（DI） ---
-    implementation("com.google.dagger:hilt-android:2.52")
-    kapt("com.google.dagger:hilt-android-compiler:2.52")
+    implementation("com.google.dagger:hilt-android:2.57.2")
+    kapt("com.google.dagger:hilt-android-compiler:2.57.2")
 
     // --- ★ 追加: Hilt × Compose の連携（NavやViewModel用） ---
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
 }
 
 // ★ 追加: Hilt + kapt のエラーを多少マイルドにする設定（任意）

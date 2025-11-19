@@ -10,6 +10,7 @@ import java.time.LocalDate
  * デモ用のインメモリ実装。
  * 実運用では Room 版などに差し替える想定。
  */
+@Suppress("unused")
 class InMemoryDailyReportRepository : DailyReportRepository {
 
     private val reports = MutableStateFlow<List<DailyReport>>(emptyList())

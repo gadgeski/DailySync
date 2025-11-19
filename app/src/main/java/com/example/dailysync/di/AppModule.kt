@@ -11,8 +11,8 @@ import com.example.dailysync.data.local.DailyReportDao
 import com.example.dailysync.data.local.DailySyncDatabase
 import com.example.dailysync.domain.export.DailyReportExporter
 import com.example.dailysync.domain.usecase.CreateDailyReportUseCase
-import com.example.dailysync.domain.usecase.ExportDailyReportsUseCase
 import com.example.dailysync.domain.usecase.ObserveDailyReportsUseCase
+import com.example.dailysync.domain.usecase.ExportDailyReportsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +20,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+// ★ このモジュールの役割:
+//   1. Room Database / Dao を提供
+//   2. Repository を提供（DB 実装を隠蔽）
+//   3. 日報用 UseCase 群を提供
+//   4. Exporter 実装を DailyReportExporter として提供（差し替えポイント）
+//   5. ExportDailyReportsUseCase を提供
+//   → ViewModel 等はこれらのインターフェースにだけ依存し、具体実装はここで差し替え可能になる。
 // ★ Hilt からのみ参照されるため、IDEの「never used」警告を抑制
 @Suppress("unused")
 @Module

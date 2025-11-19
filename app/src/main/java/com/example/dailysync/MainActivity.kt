@@ -10,10 +10,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.dailysync.presentation.DailySyncScreen
-
-// ★ 追加: Hilt 用のアノテーション import
 import dagger.hilt.android.AndroidEntryPoint
 
+// ★ 追加: Hilt 用のアノテーション import(dagger.hilt.android.AndroidEntryPoint)
 // ★ 追加: Hilt にこの Activity を認識させるためのアノテーション
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
