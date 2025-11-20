@@ -23,6 +23,20 @@ Android / Kotlin / Jetpack Compose ベースの日報アプリです。
 
 ---
 
+## アプリ画面
+
+<table>
+<tr>
+<td align="center">
+<img src="docs/img/DailySync-Home.png" alt="ホーム" width="300">
+<br>
+<sub>ホーム</sub>
+</td>
+</tr>
+</table>
+
+---
+
 ## Tech Stack
 
 - **Platform**: Android
