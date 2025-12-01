@@ -24,7 +24,7 @@ v1.0 の大規模アップデートにより、インメモリ実装から Room 
 <sub>(旧)ホーム</sub>
 </td>
 <td align="center">
-<img src="docs/img/Sunselounge-Home.png" alt="ホーム" width="300">
+<img src="docs/img/Sunsetlounge-Home.png" alt="ホーム" width="300">
 <br>
 <sub>(新)ホーム</sub>
 </td>
