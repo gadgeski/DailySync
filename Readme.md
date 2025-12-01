@@ -21,7 +21,12 @@ v1.0 の大規模アップデートにより、インメモリ実装から Room 
 <td align="center">
 <img src="docs/img/DailySync-Home.png" alt="ホーム" width="300">
 <br>
-<sub>ホーム</sub>
+<sub>(旧)ホーム</sub>
+</td>
+<td align="center">
+<img src="docs/img/Sunselounge-Home.png" alt="ホーム" width="300">
+<br>
+<sub>(新)ホーム</sub>
 </td>
 </tr>
 </table>
