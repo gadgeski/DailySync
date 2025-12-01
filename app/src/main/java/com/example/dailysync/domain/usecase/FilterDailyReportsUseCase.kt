@@ -8,7 +8,7 @@ import com.example.dailysync.domain.DailyReport
  */
 data class ReportFilter(
     val projectName: String? = null,
-    val tag: String? = null
+    val tag: String? = null,
 )
 
 /**
@@ -26,7 +26,7 @@ class FilterDailyReportsUseCase {
      */
     operator fun invoke(
         reports: List<DailyReport>,
-        filter: ReportFilter?
+        filter: ReportFilter?,
     ): List<DailyReport> {
         // ★ フィルタ条件が null の場合は、そのまま返す（「フィルタなし」として扱う）
         if (filter == null) return reports

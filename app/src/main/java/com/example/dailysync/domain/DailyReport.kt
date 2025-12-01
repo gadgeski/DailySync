@@ -22,6 +22,6 @@ data class DailyReport(
     // 拡張用に追加
     val createdAt: LocalDateTime,
     // 作成日時
-    val updatedAt: LocalDateTime
+    val updatedAt: LocalDateTime,
     // 更新日時
 )

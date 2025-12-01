@@ -17,5 +17,5 @@ data class DailyReportEntity(
     val tags: List<String>,
     // タグ（TypeConverter利用）
     val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+    val updatedAt: LocalDateTime,
 )

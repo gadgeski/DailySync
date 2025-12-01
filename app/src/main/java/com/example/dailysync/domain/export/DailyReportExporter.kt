@@ -5,7 +5,7 @@ import com.example.dailysync.domain.DailyReport
 
 enum class ExportFormat {
     TEXT,
-    MARKDOWN
+    MARKDOWN,
 }
 
 interface DailyReportExporter {

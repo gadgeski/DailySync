@@ -1,58 +1,103 @@
+# gradle/libs.versions.toml — 修正版（Stable Versions & Definitions）
+
 [versions]
 agp = "8.13.1"
-kotlin = "2.2.21"
+kotlin = "2.0.21"
 coreKtx = "1.17.0"
+datastore = "1.2.0"
+room = "2.8.4"
+lifecycle = "2.10.0"
+activityCompose = "1.12.0"
+composeBom = "2025.11.01"
+appcompat = "1.7.1"
+paging = "3.3.6"
+leakcanary = "2.14"
+material = "1.13.0"
+# ★ Fix: KSP 2.0.21-1.0.27 を使うためには、Kotlin も 2.0.21 である必要があります。
+# 2.2.21 は新しいバージョンのため、まだ対応する KSP が存在しません。
+
+# テスト系
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
-lifecycleRuntimeKtx = "2.10.0"
-activityCompose = "1.12.0"
-composeBom = "2025.11.01"
 
-# ★ 追加: Compose 用 ViewModel 拡張のバージョン
-lifecycleViewmodelCompose = "2.10.0"
+# BOM 対象外
+navigation = "2.9.6"
 
-# ★ 追加: Room 一式のバージョン
-room = "2.8.4"
-
-# ★ 追加: Hilt 一式のバージョン
+# Hilt (DI)
 hilt = "2.57.2"
-
-# ★ 追加: Hilt × Compose 連携のバージョン
 hiltNavigationCompose = "1.3.0"
 
+# KSP (Kotlin Symbol Processing)
+ksp = "2.0.21-1.0.27"
+# Kotlin 2.0.21 対応版
+
+# Spotless
+spotless = "8.1.0"
+
 [libraries]
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+# コア
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 
-# ★ 追加: lifecycle-viewmodel-compose (libs.androidx.lifecycle.viewmodel.compose)
-androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
+# ── Compose BOM ──
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-compose-ui                 = { module = "androidx.compose.ui:ui" }
+androidx-compose-ui-graphics        = { module = "androidx.compose.ui:ui-graphics" }
+androidx-compose-ui-tooling         = { module = "androidx.compose.ui:ui-tooling" }
+androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-compose-ui-test-manifest   = { module = "androidx.compose.ui:ui-test-manifest" }
+androidx-compose-ui-test-junit4     = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-compose-material3          = { module = "androidx.compose.material3:material3" }
+androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 
-# ★ 追加: Room 一式 (libs.androidx.room.runtime / ktx / compiler)
-androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
-androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+# BOM 対象外
+androidx-activity-compose          = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-navigation-compose        = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 
-# ★ 追加: Hilt 本体 & コンパイラ (libs.hilt.android / libs.hilt.android.compiler)
-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+# ★ Added: View System Material (themes.xmlエラー解消用)
+material = { module = "com.google.android.material:material", version.ref = "material" }
 
-# ★ 追加: Hilt × Compose 連携 (libs.androidx.hilt.navigation.compose)
-androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+# Hilt Libraries
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+
+# Room
+androidx-room-runtime  = { module = "androidx.room:room-runtime",   version.ref = "room" }
+androidx-room-ktx      = { module = "androidx.room:room-ktx",       version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler",  version.ref = "room" }
+androidx-room-paging   = { module = "androidx.room:room-paging",    version.ref = "room" }
+
+# DataStore
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+
+# Appcompat
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+
+# Paging
+androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+
+# LeakCanary
+leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
+
+# テスト
+junit                = { module = "junit:junit",                       version.ref = "junit" }
+androidx-junit       = { module = "androidx.test.ext:junit",           version.ref = "junitVersion" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-android      = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose      = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+# ★ Added: KSP Plugin (kaptからの移行用)
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
+# ★ Added: Hilt Plugin
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+
+# ★ Added: Spotless Plugin
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

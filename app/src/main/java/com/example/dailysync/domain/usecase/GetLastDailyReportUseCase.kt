@@ -2,14 +2,10 @@ package com.example.dailysync.domain.usecase
 
 import com.example.dailysync.data.DailyReportRepository
 import com.example.dailysync.domain.DailyReport
-import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-/**
- * 日報一覧を監視するユースケース。
- */
-class ObserveDailyReportsUseCase(
+class GetLastDailyReportUseCase @Inject constructor(
     private val repository: DailyReportRepository,
 ) {
-
-    operator fun invoke(): Flow<List<DailyReport>> = repository.observeAll()
+    suspend operator fun invoke(): DailyReport? = repository.findLast()
 }

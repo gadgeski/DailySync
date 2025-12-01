@@ -14,7 +14,7 @@ import java.time.LocalTime
  */
 @Suppress("unused") // ★ 現時点では呼び出し側が未実装なため、IDEの未使用警告を一旦抑制
 class ScheduleDailyReminderUseCase(
-    private val scheduler: ReminderScheduler
+    private val scheduler: ReminderScheduler,
 ) {
 
     /**

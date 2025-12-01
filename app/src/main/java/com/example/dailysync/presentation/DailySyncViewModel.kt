@@ -6,10 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dailysync.data.UserPreferences
 import com.example.dailysync.domain.DailyReport
 import com.example.dailysync.domain.export.ExportFormat
 import com.example.dailysync.domain.usecase.CreateDailyReportUseCase
 import com.example.dailysync.domain.usecase.ExportDailyReportsUseCase
+import com.example.dailysync.domain.usecase.GetLastDailyReportUseCase
 import com.example.dailysync.domain.usecase.ObserveDailyReportsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 // ★ 追加: エクスポート形式(enum)を使用(com.example.dailysync.domain.export.ExportFormat)
@@ -37,11 +40,12 @@ class DailySyncViewModel @Inject constructor(
     // ★ 修正: プロパティにせず、単なるコンストラクタ引数として受け取る
     observeDailyReportsUseCase: ObserveDailyReportsUseCase,
     // ★ 追加: エクスポート用ユースケースを依存として注入
-    private val exportDailyReportsUseCase: ExportDailyReportsUseCase
+    private val exportDailyReportsUseCase: ExportDailyReportsUseCase,
+    private val getLastDailyReportUseCase: GetLastDailyReportUseCase,
+    private val userPreferences: UserPreferences,
 ) : ViewModel() {
 
     // 入力中の日報
-    // ★ 修正: 型を明示してプラットフォーム型警告を解消
     var inputDate: LocalDate by mutableStateOf(LocalDate.now())
         private set
 
@@ -54,15 +58,39 @@ class DailySyncViewModel @Inject constructor(
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
+    // New States
+    var lastReport by mutableStateOf<DailyReport?>(null)
+        private set
+
+    var isPreviewMode by mutableStateOf(false)
+        private set
+
+    var issueTrackerUrlBase by mutableStateOf("")
+        private set
+
     // 一覧表示用
     val reports: StateFlow<List<DailyReport>> =
         observeDailyReportsUseCase()
-            // ★ 変更: インジェクトされた UseCase（引数）をそのまま呼び出し
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.Lazily,
-                initialValue = emptyList()
+                initialValue = emptyList(),
             )
+
+    init {
+        loadLastReport()
+        viewModelScope.launch {
+            userPreferences.issueTrackerUrlBase.collect { url ->
+                issueTrackerUrlBase = url
+            }
+        }
+    }
+
+    private fun loadLastReport() {
+        viewModelScope.launch {
+            lastReport = getLastDailyReportUseCase()
+        }
+    }
 
     fun onTitleChange(newTitle: String) {
         inputTitle = newTitle
@@ -76,29 +104,65 @@ class DailySyncViewModel @Inject constructor(
         inputDate = newDate
     }
 
+    fun togglePreviewMode() {
+        isPreviewMode = !isPreviewMode
+    }
+
+    fun updateIssueTrackerUrlBase(url: String) {
+        viewModelScope.launch {
+            userPreferences.setIssueTrackerUrlBase(url)
+        }
+    }
+
+    fun smartCopyLastReport() {
+        val report = lastReport ?: return
+
+        // Simple Smart Copy Logic: Replace dates in the body with today's date
+        // This is a heuristic. We assume dates are in format YYYY-MM-DD or MM/DD
+        val today = LocalDate.now()
+        val yesterday = report.date
+
+        // Formats to look for
+        val formats = listOf(
+            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+            DateTimeFormatter.ofPattern("MM/dd"),
+            DateTimeFormatter.ofPattern("MM.dd"),
+        )
+
+        var newBody = report.body
+
+        // A more robust way would be to find dates that match 'yesterday' and replace with 'today'
+        // But the requirement says "update date notation to today's date".
+        // Let's try to replace the string representation of yesterday with today.
+
+        formats.forEach { formatter ->
+            val yesterdayStr = yesterday.format(formatter)
+            val todayStr = today.format(formatter)
+            newBody = newBody.replace(yesterdayStr, todayStr)
+        }
+
+        inputTitle = report.title // Copy title too? Maybe useful.
+        inputBody = newBody
+    }
+
     fun onSaveClick() {
         viewModelScope.launch {
             try {
                 createDailyReportUseCase(
                     date = inputDate,
                     title = inputTitle,
-                    body = inputBody
+                    body = inputBody,
                 )
-                // 成功時に必要なら入力をクリアするなど
-                // inputTitle = ""
-                // inputBody = ""
                 errorMessage = null
+                // Reload last report as the one we just saved might become the last one
+                loadLastReport()
             } catch (e: IllegalArgumentException) {
                 errorMessage = e.message
-            } catch (_: Exception) { // ★ 修正: 使わない例外パラメータは _ にして意図を明示
+            } catch (_: Exception) {
                 errorMessage = "保存に失敗しました"
             }
         }
     }
 
-    // ★ 追加: 画面から日報をエクスポートするためのAPI
-    // Compose 側では rememberCoroutineScope.launch { viewModel.exportReports(…) } のように呼ぶ想定
-    suspend fun exportReports(format: ExportFormat): String {
-        return exportDailyReportsUseCase(format)
-    }
+    suspend fun exportReports(format: ExportFormat): String = exportDailyReportsUseCase(format)
 }

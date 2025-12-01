@@ -21,6 +21,11 @@ interface DailyReportRepository {
     suspend fun findByDate(date: LocalDate): DailyReport?
 
     /**
+     * 最新の日報を1件取得（なければ null）
+     */
+    suspend fun findLast(): DailyReport?
+
+    /**
      * 全ての日報を新しい順で監視する
      */
     fun observeAll(): Flow<List<DailyReport>>

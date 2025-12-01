@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 @Database(
     entities = [DailyReportEntity::class],
     version = 1,
-    exportSchema = false
+    exportSchema = false,
 )
 @TypeConverters(Converters::class)
 abstract class DailySyncDatabase : RoomDatabase() {

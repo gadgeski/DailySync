@@ -1,7 +1,10 @@
-// di/AppModule.kt
+// app/src/main/java/com/example/dailysync/di/AppModule.kt
 package com.example.dailysync.di
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.example.dailysync.data.DailyReportRepository
 import com.example.dailysync.data.RoomDailyReportRepository
@@ -11,8 +14,8 @@ import com.example.dailysync.data.local.DailyReportDao
 import com.example.dailysync.data.local.DailySyncDatabase
 import com.example.dailysync.domain.export.DailyReportExporter
 import com.example.dailysync.domain.usecase.CreateDailyReportUseCase
-import com.example.dailysync.domain.usecase.ObserveDailyReportsUseCase
 import com.example.dailysync.domain.usecase.ExportDailyReportsUseCase
+import com.example.dailysync.domain.usecase.ObserveDailyReportsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,20 +23,21 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-// ★ このモジュールの役割:
-//   1. Room Database / Dao を提供
-//   2. Repository を提供（DB 実装を隠蔽）
-//   3. 日報用 UseCase 群を提供
-//   4. Exporter 実装を DailyReportExporter として提供（差し替えポイント）
-//   5. ExportDailyReportsUseCase を提供
-//   → ViewModel 等はこれらのインターフェースにだけ依存し、具体実装はここで差し替え可能になる。
-// ★ Hilt からのみ参照されるため、IDEの「never used」警告を抑制
+// ★ Added: DataStore の定義をここに移動（UserPreferences.kt から移動）
+// 設定ファイル名は "settings" で統一
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
 @Suppress("unused")
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    // ★ Converters を Hilt から提供して、Room に渡せるようにする
+    // ★ Added: DataStore<Preferences> を提供するメソッド
+    // これにより、UserPreferences などのクラスで直接 DataStore を受け取れるようになります。
+    @Provides
+    @Singleton
+    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> = context.dataStore
+
     @Provides
     @Singleton
     fun provideConverters(): Converters = Converters()
@@ -42,62 +46,47 @@ object AppModule {
     @Singleton
     fun provideDatabase(
         @ApplicationContext context: Context,
-        converters: Converters
-        // ★ Hilt 提供の Converters を受け取る
-    ): DailySyncDatabase {
-        return Room.databaseBuilder(
-            context,
-            DailySyncDatabase::class.java,
-            "daily_sync.db"
-        )
-            .addTypeConverter(converters)
-            // ★ new ではなく、DI から貰ったインスタンスを渡す
-            .build()
-    }
+        converters: Converters,
+    ): DailySyncDatabase = Room.databaseBuilder(
+        context,
+        DailySyncDatabase::class.java,
+        "daily_sync.db",
+    )
+        .addTypeConverter(converters)
+        .build()
 
     @Provides
     fun provideDailyReportDao(
-        db: DailySyncDatabase
+        db: DailySyncDatabase,
     ): DailyReportDao = db.dailyReportDao()
 
     @Provides
     @Singleton
     fun provideDailyReportRepository(
-        dao: DailyReportDao
+        dao: DailyReportDao,
     ): DailyReportRepository = RoomDailyReportRepository(dao)
 
     @Provides
     fun provideCreateDailyReportUseCase(
-        repository: DailyReportRepository
+        repository: DailyReportRepository,
     ): CreateDailyReportUseCase = CreateDailyReportUseCase(repository)
 
     @Provides
     fun provideObserveDailyReportsUseCase(
-        repository: DailyReportRepository
+        repository: DailyReportRepository,
     ): ObserveDailyReportsUseCase = ObserveDailyReportsUseCase(repository)
 
     @Provides
     @Singleton
-    // ★ stateless な Exporter なのでシングルトンで十分
-    // ★ ポイント: Export の実装を差し替えたい場合は「この関数の戻り値だけ変えればよい」
-    //    例) PlainTextExporter や JsonExporter を作ってここで返す実装を切り替える
-    fun provideDailyReportExporter(): DailyReportExporter {
-        return MarkdownDailyReportExporter()
-        // ★ 差し替えイメージ:
-        // return PlainTextDailyReportExporter()
-        // のように、この1行を変えるだけでアプリ全体のエクスポート形式を切り替えられる
-    }
+    fun provideDailyReportExporter(): DailyReportExporter = MarkdownDailyReportExporter()
 
-    // ★ エクスポート用ユースケースをDIグラフに載せる
     @Provides
     @Singleton
-    // ★ UseCase も基本ステートレスなので Singleton で問題なし
     fun provideExportDailyReportsUseCase(
         repository: DailyReportRepository,
-        exporter: DailyReportExporter
-    ): ExportDailyReportsUseCase =
-        ExportDailyReportsUseCase(
-            repository = repository,
-            exporter = exporter
-        )
+        exporter: DailyReportExporter,
+    ): ExportDailyReportsUseCase = ExportDailyReportsUseCase(
+        repository = repository,
+        exporter = exporter,
+    )
 }

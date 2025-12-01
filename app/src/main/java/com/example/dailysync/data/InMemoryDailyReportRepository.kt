@@ -34,13 +34,10 @@ class InMemoryDailyReportRepository : DailyReportRepository {
         return newReport
     }
 
-    override suspend fun findByDate(date: LocalDate): DailyReport? {
-        return reports.value.find { it.date == date }
-    }
+    override suspend fun findByDate(date: LocalDate): DailyReport? = reports.value.find { it.date == date }
 
-    override fun observeAll(): Flow<List<DailyReport>> {
-        return reports.map { list ->
-            list.sortedByDescending { it.date }
-        }
+    override suspend fun findLast(): DailyReport? = reports.value.maxByOrNull { it.date }
+    override fun observeAll(): Flow<List<DailyReport>> = reports.map { list ->
+        list.sortedByDescending { it.date }
     }
 }

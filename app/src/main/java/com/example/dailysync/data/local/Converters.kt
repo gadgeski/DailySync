@@ -16,26 +16,21 @@ class Converters {
 
     // LocalDate
     @TypeConverter
-    fun fromDate(value: String?): LocalDate? =
-        value?.let { LocalDate.parse(it, dateFormatter) }
+    fun fromDate(value: String?): LocalDate? = value?.let { LocalDate.parse(it, dateFormatter) }
 
     @TypeConverter
-    fun dateToString(date: LocalDate?): String? =
-        date?.format(dateFormatter)
+    fun dateToString(date: LocalDate?): String? = date?.format(dateFormatter)
 
     // LocalDateTime
     @TypeConverter
-    fun fromDateTime(value: String?): LocalDateTime? =
-        value?.let { LocalDateTime.parse(it, dateTimeFormatter) }
+    fun fromDateTime(value: String?): LocalDateTime? = value?.let { LocalDateTime.parse(it, dateTimeFormatter) }
 
     @TypeConverter
-    fun dateTimeToString(dateTime: LocalDateTime?): String? =
-        dateTime?.format(dateTimeFormatter)
+    fun dateTimeToString(dateTime: LocalDateTime?): String? = dateTime?.format(dateTimeFormatter)
 
     // List<String> <-> String (カンマ区切り)
     @TypeConverter
-    fun fromStringList(value: String?): List<String> =
-        // ★ split 後に trim + 空文字除去を入れておくと安全
+    fun fromStringList(value: String?): List<String> = // ★ split 後に trim + 空文字除去を入れておくと安全
         value
             ?.takeIf { it.isNotBlank() }
             ?.split(",")
@@ -44,10 +39,9 @@ class Converters {
             ?: emptyList()
 
     @TypeConverter
-    fun toStringList(list: List<String>?): String =
-        list
-            ?.map { it.trim() }
-            ?.filter { it.isNotEmpty() }
-            ?.joinToString(",")
-            ?: ""
+    fun toStringList(list: List<String>?): String = list
+        ?.map { it.trim() }
+        ?.filter { it.isNotEmpty() }
+        ?.joinToString(",")
+        ?: ""
 }
