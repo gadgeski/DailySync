@@ -11,13 +11,13 @@ import java.time.LocalDateTime
  * - バリデーションもここでまとめて行う
  */
 class CreateDailyReportUseCase(
-    private val repository: DailyReportRepository
+    private val repository: DailyReportRepository,
 ) {
 
     suspend operator fun invoke(
         date: LocalDate,
         title: String,
-        body: String
+        body: String,
     ): DailyReport {
         require(title.isNotBlank()) { "タイトルは必須です" }
 
@@ -31,7 +31,7 @@ class CreateDailyReportUseCase(
             ?.copy(
                 title = title,
                 body = body,
-                updatedAt = now
+                updatedAt = now,
             )
             ?: DailyReport(
                 id = 0L,
@@ -39,7 +39,7 @@ class CreateDailyReportUseCase(
                 title = title,
                 body = body,
                 createdAt = now,
-                updatedAt = now
+                updatedAt = now,
             )
 
         return repository.save(report)

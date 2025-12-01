@@ -14,6 +14,9 @@ interface DailyReportDao {
     @Query("SELECT * FROM daily_reports WHERE date = :date LIMIT 1")
     suspend fun findByDate(date: LocalDate): DailyReportEntity?
 
+    @Query("SELECT * FROM daily_reports ORDER BY date DESC LIMIT 1")
+    suspend fun findLast(): DailyReportEntity?
+
     @Query("SELECT * FROM daily_reports ORDER BY date DESC")
     fun observeAll(): Flow<List<DailyReportEntity>>
 

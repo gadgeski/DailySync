@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.firstOrNull
 
 class ExportDailyReportsUseCase(
     private val repository: DailyReportRepository,
-    private val exporter: DailyReportExporter
+    private val exporter: DailyReportExporter,
 ) {
     suspend operator fun invoke(format: ExportFormat): String {
         // ★ 型を DailyReport で明示しておくと読みやすい & 変な推論エラーを防げる

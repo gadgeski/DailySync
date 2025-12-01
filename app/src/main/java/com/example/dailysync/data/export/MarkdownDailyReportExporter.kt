@@ -18,45 +18,41 @@ class MarkdownDailyReportExporter : DailyReportExporter {
 
     override fun export(
         reports: List<DailyReport>,
-        format: ExportFormat
-    ): String {
-        return when (format) {
-            ExportFormat.TEXT -> exportAsText(reports)
-            ExportFormat.MARKDOWN -> exportAsMarkdown(reports)
-        }
+        format: ExportFormat,
+    ): String = when (format) {
+        ExportFormat.TEXT -> exportAsText(reports)
+        ExportFormat.MARKDOWN -> exportAsMarkdown(reports)
     }
 
     // Text形式
-    private fun exportAsText(reports: List<DailyReport>): String =
-        buildString {
-            for (report in reports) {
-                appendLine("=== ${report.date.format(dateFormatter)} ===")
-                appendLine("[${report.title}]")
-                appendLine(report.body)
-                appendLine()
+    private fun exportAsText(reports: List<DailyReport>): String = buildString {
+        for (report in reports) {
+            appendLine("=== ${report.date.format(dateFormatter)} ===")
+            appendLine("[${report.title}]")
+            appendLine(report.body)
+            appendLine()
             // 空行 ★ コメントを同じ行に寄せて読みやすく
-            }
         }
+    }
 
     // Markdown形式
-    private fun exportAsMarkdown(reports: List<DailyReport>): String =
-        buildString {
-            for (report in reports) {
-                appendLine("## ${report.date.format(dateFormatter)}  ${report.title}")
+    private fun exportAsMarkdown(reports: List<DailyReport>): String = buildString {
+        for (report in reports) {
+            appendLine("## ${report.date.format(dateFormatter)}  ${report.title}")
 
-                if (!report.projectName.isNullOrBlank()) {
-                    appendLine("- Project: ${report.projectName}")
-                }
-
-                if (report.tags.isNotEmpty()) {
-                    // ★ ダブルクォートのエスケープも不要なので素直な書き方に変更
-                    appendLine("- Tags: ${report.tags.joinToString(", ")}")
-                }
-
-                // ★ ここはifの外に出す前提なら、インデントをforブロックと揃える
-                appendLine()
-                appendLine(report.body)
-                appendLine()
+            if (!report.projectName.isNullOrBlank()) {
+                appendLine("- Project: ${report.projectName}")
             }
+
+            if (report.tags.isNotEmpty()) {
+                // ★ ダブルクォートのエスケープも不要なので素直な書き方に変更
+                appendLine("- Tags: ${report.tags.joinToString(", ")}")
+            }
+
+            // ★ ここはifの外に出す前提なら、インデントをforブロックと揃える
+            appendLine()
+            appendLine(report.body)
+            appendLine()
         }
+    }
 }

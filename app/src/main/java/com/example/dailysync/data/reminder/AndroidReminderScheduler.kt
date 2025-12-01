@@ -11,7 +11,7 @@ import java.util.Calendar
 
 class AndroidReminderScheduler(
     private val context: Context,
-    private val alarmManager: AlarmManager
+    private val alarmManager: AlarmManager,
 ) : ReminderScheduler {
 
     override fun scheduleDailyReminder(time: LocalTime) {
@@ -36,7 +36,7 @@ class AndroidReminderScheduler(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
             AlarmManager.INTERVAL_DAY,
-            pendingIntent
+            pendingIntent,
         )
     }
 
@@ -60,7 +60,7 @@ class AndroidReminderScheduler(
             context,
             REQUEST_CODE,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
     }
 

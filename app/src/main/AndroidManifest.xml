@@ -11,10 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DailySync">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.DailySync">
+            android:theme="@style/Theme.DailySync"
+            android:windowSoftInputMode="adjustResize">
+            <!-- ★ Added: adjustResize を追加。Composeでキーボード制御を行うために必須 -->
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

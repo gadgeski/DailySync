@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- ★ Fix: Theme.Material3.DayNight.NoActionBar に変更 -->
+    <!-- これにより Edge-to-Edge が正しく動作するようになります -->
+    <style name="Theme.DailySync" parent="Theme.Material3.DayNight.NoActionBar">
 
-    <style name="Theme.DailySync" parent="android:Theme.Material.Light.NoActionBar" />
+        <!-- ★ Added: ステータスバーを透明にする -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
+        <!-- ★ Added: アイコンの色をテーマに合わせて制御 -->
+        <!-- DailySync は「Sunset Lounge (暖色・高級感)」なので、
+             背景が暗い場合は false (白文字)、明るい場合は true (黒文字) にする設定が一般的ですが、
+             没入感を優先して「常に背景を透かす」設定にします。 -->
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- ★ Added: ナビゲーションバーも透明化 -->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <!-- 起動時の背景色（チラつき防止） -->
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
 </resources>

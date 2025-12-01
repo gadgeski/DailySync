@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 
 class RoomDailyReportRepository(
-    private val dao: DailyReportDao
+    private val dao: DailyReportDao,
 ) : DailyReportRepository {
 
     override suspend fun save(report: DailyReport): DailyReport {
@@ -18,13 +18,11 @@ class RoomDailyReportRepository(
         return report.copy(id = if (report.id == 0L) id else report.id)
     }
 
-    override suspend fun findByDate(date: LocalDate): DailyReport? {
-        return dao.findByDate(date)?.toDomain()
-    }
+    override suspend fun findByDate(date: LocalDate): DailyReport? = dao.findByDate(date)?.toDomain()
 
-    override fun observeAll(): Flow<List<DailyReport>> {
-        return dao.observeAll().map { list ->
-            list.map { it.toDomain() }
-        }
+    override suspend fun findLast(): DailyReport? = dao.findLast()?.toDomain()
+
+    override fun observeAll(): Flow<List<DailyReport>> = dao.observeAll().map { list ->
+        list.map { it.toDomain() }
     }
 }

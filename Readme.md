@@ -1,29 +1,20 @@
-# DailySync
+# 🌇 DailySync: Sunset Lounge Edition
 
-Android / Kotlin / Jetpack Compose ベースの日報アプリです。  
-その日の作業内容や学びを素早くメモして、後から振り返りやすくすることを目的としています。
+> **"Reflect on your day in the warmth of the sunset."**
 
-現時点では、責務ごとにクラスを分割したシンプルな構成（ドメインモデル＋ UseCase ＋ Repository ＋ ViewModel ＋ Compose UI）のサンプル兼ポートフォリオとして位置付けています。
+夕暮れのラウンジをイメージした **「Sunset Lounge (Warm Luxury Glass)」** デザインの、エンジニア向け日報 & ジャーナリングアプリ。
 
----
+## 🚀 概要 (Overview)
 
-## Features (現状の機能)
+DailySync は、日々の作業内容や学びを **「情緒的かつ効率的」** に記録するためのアプリケーションです。
 
-- 日報の作成・更新
-  - 日付ごとに 1 件の日報を保存（同じ日付に対しては上書き）
-  - タイトル（必須）と本文を入力
-- 日報一覧の表示
-  - 保存済みの日報を日付の新しい順にリスト表示
-  - 各日報のタイトルと本文の先頭部分をカード形式で表示
-- バリデーション
-  - タイトルが空の場合は保存時にエラーメッセージを表示
+v1.0 の大規模アップデートにより、インメモリ実装から Room Database + Hilt による本格的なアーキテクチャへ移行しました。
 
-※ 現時点では、データ保存は **インメモリ実装** です（アプリを再起動すると初期化されます）。
-→ インメモリ実装から変更予定
+デザイン面では、姉妹アプリである BugMemo の「Iceberg Tech（寒色）」と対をなす、「Sunset Lounge（暖色）」テーマを採用し、書くこと自体が楽しくなる UI を目指しています。
 
 ---
 
-## アプリ画面
+## アプリ画面(旧)
 
 <table>
 <tr>
@@ -37,33 +28,116 @@ Android / Kotlin / Jetpack Compose ベースの日報アプリです。
 
 ---
 
-## Tech Stack
+## ✨ 主な機能 (Features)
 
-- **Platform**: Android
-- **Language**: Kotlin
-- **UI**: Jetpack Compose, Material3
-- **Architecture**: MVVM + UseCase + Repository
+### ✍️ Writing Experience
+
+#### Immersive Editor
+
+- ステータスバーを透過した Edge-to-Edge の没入型エディタ
+- エディトリアルデザイン（雑誌のようなレイアウト）を意識したタイポグラフィ
+
+#### Smart Copy
+
+昨日の日報をワンタップで参照・コピーする機能。日付などは自動で「今日」のものに置換されます。
+
+#### Preview Mode
+
+入力中の Markdown（太字、リンク、リスト）を即座にレンダリングして確認できるプレビュー機能。
+
+### ⚙️ Smart Integration
+
+#### Issue Tracker Link
+
+設定画面でベース URL（GitHub/Jira 等）を登録することで、`#123`などのチケット番号を自動的にリンク化。
+
+#### Markdown Export
+
+作成した日報を Markdown 形式で整形し、Slack や GitHub Gist などの外部アプリへ即座に共有。
+
+## 🎨 Design System: "Sunset Lounge"
+
+**Concept**: 高級ホテルのラウンジ、夕暮れ、琥珀色。
+
+### Visuals
+
+- `LuxuryCopper` ~ `LuxuryDeepBrown` の暖色グラデーション
+- 磨りガラスのようなカード UI (GlassMorphism)
+- セリフ体とサンセリフ体を組み合わせた優雅なフォント使い
+
+## 🛠️ 技術スタック (Tech Stack)
+
+### Architecture
+
+MVVM + Clean Architecture を採用し、責務を明確に分離しています。
+
+```mermaid
+graph TD
+    UI[Compose UI / Screen] --> VM[ViewModel]
+    VM --> UC[UseCases]
+    UC --> Repo[Repository Interface]
+    Repo --> Local[Room Database]
+    Repo --> Prefs[DataStore]
+
+    subgraph Domain Layer
+    UC
+    Repo
+    Models[Domain Models]
+    end
+
+    subgraph Data Layer
+    Local
+    Prefs
+    RepoImpl[Repository Impl]
+    end
+```
+
+#### UseCases
+
+`CreateDailyReport`, `GetLastDailyReport` など、ユーザーの操作単位でロジックをカプセル化。
+
+#### DI (Hilt)
+
+`AppModule`により、DB や Repository、UseCase の依存関係を一元管理。
+
+### Libraries
+
+- **UI**: Jetpack Compose (Material 3), Navigation Compose
 - **Async**: Kotlin Coroutines, Flow / StateFlow
+- **Database**: Room (KSP, Migration 対応), DataStore (Preferences)
+- **Build**: Gradle Kotlin DSL + Version Catalog (libs.versions.toml)
+- **Quality**: Spotless (Ktlint), GitHub Actions
+
+## 💻 セットアップ
+
+### ビルドコマンド
+
+```bash
+# 依存解決
+./gradlew help
+
+# ビルド & インストール
+./gradlew installDebug
+
+# コード整形
+./gradlew spotlessApply
+
+# テスト
+./gradlew test
+```
+
+### 開発環境
+
+- JDK 17
+- Android Studio Ladybug 以降
+
+## 📂 プロジェクト構成
+
+- **presentation/**: UI (Screen, ViewModel, Components)
+- **domain/**: ビジネスロジック (UseCase, Model, Repository Interface)
+- **data/**: データ実装 (Room Entity/Dao, Repository Impl, DataStore)
+- **di/**: Hilt Modules
 
 ---
 
-## Architecture
-
-DailySync は、小さなクリーンアーキテクチャ風のレイヤ構成を採用しています。
-
-```text
-UI (Compose)
-  ↓
-ViewModel (DailySyncViewModel)
-  ↓
-UseCase
-  - CreateDailyReportUseCase
-  - ObserveDailyReportsUseCase
-  ↓
-Repository
-  - DailyReportRepository (interface)
-  - InMemoryDailyReportRepository (implementation)
-  ↓
-Domain Model
-  - DailyReport
-```
+_DailySync - Reflect on your day in the warmth of the sunset._
