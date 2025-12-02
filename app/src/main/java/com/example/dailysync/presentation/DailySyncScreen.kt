@@ -1,4 +1,4 @@
-// presentation/DailySyncScreen.kt
+// app/src/main/java/com/example/dailysync/presentation/DailySyncScreen.kt
 
 @file:Suppress("ktlint:standard:function-naming")
 @file:OptIn(ExperimentalMaterial3Api::class)
@@ -88,10 +88,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-/* ========================================================
-   DailySync: "Sunset Lounge" Edition
-   温かみのある高級感・エディトリアルデザイン実装版
-   ======================================================== */
+// ... (Imports are fine)
 
 @Composable
 fun DailySyncScreen(
@@ -103,17 +100,12 @@ fun DailySyncScreen(
     val isPreviewMode = viewModel.isPreviewMode
     val issueTrackerUrlBase = viewModel.issueTrackerUrlBase
 
-    // ★ グラデーション刷新: 温かみのある夕暮れ色
-    // 上(光) -> 下(闇) への自然な減光
     val backgroundBrush = remember {
         Brush.verticalGradient(
             colors = listOf(
                 LuxuryCopper,
-                // 上部: 柔らかい赤銅色
                 LuxuryDeepBrown,
-                // 下部: 深いブラウン
                 Color.Black,
-                // 最下部: 引き締め
             ),
         )
     }
@@ -126,7 +118,6 @@ fun DailySyncScreen(
         Scaffold(
             containerColor = Color.Transparent,
             topBar = {
-                // Settings Button at top right
                 Box(modifier = Modifier.fillMaxWidth().statusBarsPadding().padding(end = 16.dp, top = 8.dp)) {
                     IconButton(
                         onClick = onSettingsClick,
@@ -146,25 +137,22 @@ fun DailySyncScreen(
                 modifier = Modifier
                     .padding(padding)
                     .padding(horizontal = 24.dp)
-                    // ★ 少し余白を増やしてゆったりさせる
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(28.dp),
-                // ★ 要素間隔も広めに
             ) {
-                // ──── Header Section (Editorial Serif) ────
+                // Header Section
                 val headerFormatter = remember { DateTimeFormatter.ofPattern("MM.dd") }
                 val dateString = viewModel.inputDate.format(headerFormatter)
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = dateString,
-                    // ★ Type.kt の displayLarge (Serif体) が適用される
                     style = MaterialTheme.typography.displayLarge,
                     color = LuxuryTextPrimary,
                     modifier = Modifier.fillMaxWidth(),
                 )
 
-                // ──── Reference Panel (Yesterday's Log) ────
+                // Reference Panel
                 if (lastReport != null) {
                     ReferencePanel(
                         report = lastReport,
@@ -172,7 +160,7 @@ fun DailySyncScreen(
                     )
                 }
 
-                // ──── Glass Card Section (Input / Preview) ────
+                // Glass Card Section
                 GlassCard {
                     // Toggle Header
                     Row(
@@ -194,39 +182,44 @@ fun DailySyncScreen(
                         }
                     }
 
-                    AnimatedContent(
-                        targetState = isPreviewMode,
-                        transitionSpec = {
-                            fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
-                        },
-                        label = "EditPreviewTransition",
-                    ) { targetPreview ->
-                        if (targetPreview) {
-                            // Preview Mode
-                            Column(modifier = Modifier.fillMaxWidth().heightIn(min = 300.dp)) {
-                                Text(
-                                    text = viewModel.inputTitle.ifBlank { "No Title" },
-                                    style = MaterialTheme.typography.titleLarge,
-                                    color = LuxuryTextPrimary,
-                                )
-                                Spacer(modifier = Modifier.height(16.dp))
-                                MarkdownText(
-                                    markdown = viewModel.inputBody.ifBlank { "No content..." },
-                                    issueTrackerUrlBase = issueTrackerUrlBase,
-                                    modifier = Modifier.fillMaxWidth(),
-                                )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
+                    ) {
+                        AnimatedContent(
+                            targetState = isPreviewMode,
+                            transitionSpec = {
+                                fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
+                            },
+                            label = "EditPreviewTransition",
+                        ) { targetPreview ->
+                            if (targetPreview) {
+                                // Preview Mode
+                                Column(modifier = Modifier.fillMaxWidth().heightIn(min = 300.dp)) {
+                                    Text(
+                                        text = viewModel.inputTitle.ifBlank { "No Title" },
+                                        style = MaterialTheme.typography.titleLarge,
+                                        color = LuxuryTextPrimary,
+                                    )
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    MarkdownText(
+                                        markdown = viewModel.inputBody.ifBlank { "No content..." },
+                                        issueTrackerUrlBase = issueTrackerUrlBase,
+                                        modifier = Modifier.fillMaxWidth(),
+                                    )
+                                }
+                            } else {
+                                // Edit Mode
+                                DailySyncInputSection(viewModel)
                             }
-                        } else {
-                            // Edit Mode
-                            DailySyncInputSection(viewModel)
                         }
                     }
                 }
 
-                // ──── List Section ────
+                // List Section
                 Text(
                     text = "HISTORY / LOGS",
-                    // ★ Type.kt の labelLarge (SansSerif/Wide) が適用される
                     style = MaterialTheme.typography.labelLarge,
                     color = LuxuryTextSecondary,
                 )
@@ -237,9 +230,7 @@ fun DailySyncScreen(
     }
 }
 
-/* ─────────────────────────────────────────────────────────
-   Helper Components
-   ───────────────────────────────────────────────────────── */
+// Helper Components
 
 @Composable
 private fun GlassCard(
@@ -250,14 +241,11 @@ private fun GlassCard(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            // ★ 暖色系のガラス色
             containerColor = LuxuryGlassSurface,
         ),
-        // ★ ゴールドの繊細な枠線
         border = BorderStroke(1.dp, LuxuryGlassBorder),
         elevation = CardDefaults.cardElevation(0.dp),
     ) {
-        // 中身のpaddingも少しゆったりと
         Column(
             modifier = Modifier.padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -274,117 +262,116 @@ private fun DailySyncInputSection(
     val errorMessage = viewModel.errorMessage
     val showDatePicker = remember { mutableStateOf(false) }
     val dateFormatter = remember { DateTimeFormatter.ofPattern("yyyy.MM.dd") }
-    // ドット区切りでおしゃれに
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    // ★ Date Selection (Serif Font)
-    TextButton(
-        onClick = { showDatePicker.value = true },
-    ) {
-        Text(
-            text = "Target Date: ${viewModel.inputDate.format(dateFormatter)}",
-            style = MaterialTheme.typography.titleMedium,
-            // Serif
-            color = LuxuryGold,
-            fontWeight = FontWeight.Bold,
-        )
-    }
-
-    if (showDatePicker.value) {
-        val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = viewModel.inputDate
-                .atStartOfDay(ZoneId.systemDefault())
-                .toInstant()
-                .toEpochMilli(),
-        )
-        DatePickerDialog(
-            onDismissRequest = { showDatePicker.value = false },
-            confirmButton = {
-                TextButton(onClick = {
-                    val millis = datePickerState.selectedDateMillis
-                    if (millis != null) {
-                        val localDate = Instant.ofEpochMilli(millis)
-                            .atZone(ZoneId.systemDefault()).toLocalDate()
-                        viewModel.onDateChange(localDate)
-                    }
-                    showDatePicker.value = false
-                }) { Text("OK") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDatePicker.value = false }) { Text("CANCEL") }
-            },
-        ) {
-            DatePicker(state = datePickerState)
-        }
-    }
-
-    // ★ Inputs (Elegant)
-    LuxuryTextField(
-        value = viewModel.inputTitle,
-        onValueChange = viewModel::onTitleChange,
-        label = "Title",
-    )
-
-    LuxuryTextField(
-        value = viewModel.inputBody,
-        onValueChange = viewModel::onBodyChange,
-        label = "Thoughts & Progress",
-        // 文言も少し情緒的に
-        minHeight = 140.dp,
-    )
-
-    if (errorMessage != null) {
-        Text(
-            text = errorMessage,
-            color = MaterialTheme.colorScheme.error,
-            style = MaterialTheme.typography.bodySmall,
-        )
-    }
-
-    // ★ Buttons
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        // COMMIT LOG (Gold Button)
-        Button(
-            onClick = { viewModel.onSaveClick() },
-            modifier = Modifier.fillMaxWidth().height(56.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = LuxuryGold,
-                contentColor = LuxuryDeepBrown,
-            ),
-            shape = RoundedCornerShape(12.dp),
+    // ★ Fix: Column でラップして垂直配置を保証する
+    // AnimatedContent は子要素を Box のように重ねて配置するため、
+    // ここで Column にしないとボタンとテキストフィールドが重なってしまいます。
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        // Date Selection
+        TextButton(
+            onClick = { showDatePicker.value = true },
         ) {
             Text(
-                "COMMIT LOG",
-                style = MaterialTheme.typography.labelLarge,
-                // Wide spacing
-                fontWeight = FontWeight.Black,
+                text = "Target Date: ${viewModel.inputDate.format(dateFormatter)}",
+                style = MaterialTheme.typography.titleMedium,
+                color = LuxuryGold,
+                fontWeight = FontWeight.Bold,
             )
         }
 
-        // EXPORT (Outlined Gold)
-        OutlinedButton(
-            onClick = {
-                scope.launch {
-                    try {
-                        val markdown = viewModel.exportReports(ExportFormat.MARKDOWN)
-                        if (markdown.isBlank()) return@launch
-                        val sendIntent = Intent(Intent.ACTION_SEND).apply {
-                            type = "text/plain"
-                            putExtra(Intent.EXTRA_TEXT, markdown)
+        if (showDatePicker.value) {
+            val datePickerState = rememberDatePickerState(
+                initialSelectedDateMillis = viewModel.inputDate
+                    .atStartOfDay(ZoneId.systemDefault())
+                    .toInstant()
+                    .toEpochMilli(),
+            )
+            DatePickerDialog(
+                onDismissRequest = { showDatePicker.value = false },
+                confirmButton = {
+                    TextButton(onClick = {
+                        val millis = datePickerState.selectedDateMillis
+                        if (millis != null) {
+                            val localDate = Instant.ofEpochMilli(millis)
+                                .atZone(ZoneId.systemDefault()).toLocalDate()
+                            viewModel.onDateChange(localDate)
                         }
-                        val shareIntent = Intent.createChooser(sendIntent, "Share Log")
-                        context.startActivity(shareIntent)
-                    } catch (_: Exception) { }
-                }
-            },
-            modifier = Modifier.fillMaxWidth(),
-            border = BorderStroke(1.dp, LuxuryGold.copy(alpha = 0.5f)),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = LuxuryGold,
-            ),
-        ) {
-            Text("EXPORT MARKDOWN", style = MaterialTheme.typography.labelLarge)
+                        showDatePicker.value = false
+                    }) { Text("OK") }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDatePicker.value = false }) { Text("CANCEL") }
+                },
+            ) {
+                DatePicker(state = datePickerState)
+            }
+        }
+
+        // Inputs
+        LuxuryTextField(
+            value = viewModel.inputTitle,
+            onValueChange = viewModel::onTitleChange,
+            label = "Title",
+        )
+
+        LuxuryTextField(
+            value = viewModel.inputBody,
+            onValueChange = viewModel::onBodyChange,
+            label = "Thoughts & Progress",
+            minHeight = 140.dp,
+        )
+
+        if (errorMessage != null) {
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+            )
+        }
+
+        // Buttons
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Button(
+                onClick = { viewModel.onSaveClick() },
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = LuxuryGold,
+                    contentColor = LuxuryDeepBrown,
+                ),
+                shape = RoundedCornerShape(12.dp),
+            ) {
+                Text(
+                    "COMMIT LOG",
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Black,
+                )
+            }
+
+            OutlinedButton(
+                onClick = {
+                    scope.launch {
+                        try {
+                            val markdown = viewModel.exportReports(ExportFormat.MARKDOWN)
+                            if (markdown.isBlank()) return@launch
+                            val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                                type = "text/plain"
+                                putExtra(Intent.EXTRA_TEXT, markdown)
+                            }
+                            val shareIntent = Intent.createChooser(sendIntent, "Share Log")
+                            context.startActivity(shareIntent)
+                        } catch (_: Exception) { }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                border = BorderStroke(1.dp, LuxuryGold.copy(alpha = 0.5f)),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = LuxuryGold,
+                ),
+            ) {
+                Text("EXPORT MARKDOWN", style = MaterialTheme.typography.labelLarge)
+            }
         }
     }
 }
@@ -420,7 +407,6 @@ private fun LuxuryTextField(
         ),
         shape = RoundedCornerShape(12.dp),
         textStyle = MaterialTheme.typography.bodyLarge,
-        // Sans-Serif for input
     )
 }
 
@@ -451,7 +437,6 @@ private fun DailySyncReportList(
                     Text(
                         text = report.title,
                         style = MaterialTheme.typography.titleMedium,
-                        // Serif Headline
                         color = LuxuryTextPrimary,
                     )
                     Spacer(modifier = Modifier.height(6.dp))
@@ -460,7 +445,6 @@ private fun DailySyncReportList(
                         style = MaterialTheme.typography.bodySmall,
                         color = LuxuryGold.copy(alpha = 0.8f),
                         fontStyle = FontStyle.Italic,
-                        // 日付を斜体にしてエレガントに
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
@@ -468,7 +452,6 @@ private fun DailySyncReportList(
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodySmall,
-                        // Sans body
                         color = LuxuryTextSecondary,
                     )
                 }

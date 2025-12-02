@@ -3,7 +3,6 @@
 
 package com.example.dailysync
 
-import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -23,6 +22,7 @@ import com.example.dailysync.presentation.DailySyncViewModel
 import com.example.dailysync.presentation.SettingsScreen
 import com.example.dailysync.ui.theme.DailySyncTheme
 import dagger.hilt.android.AndroidEntryPoint
+import android.graphics.Color as AndroidColor
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -69,7 +69,7 @@ fun DailySyncApp() {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.HOME
+        startDestination = Routes.HOME,
     ) {
         // メイン画面（日報一覧）
         composable(Routes.HOME) {
@@ -77,7 +77,7 @@ fun DailySyncApp() {
                 viewModel = viewModel,
                 onSettingsClick = {
                     navController.navigate(Routes.SETTINGS)
-                }
+                },
             )
         }
 
@@ -88,7 +88,7 @@ fun DailySyncApp() {
                 onUrlChange = { viewModel.updateIssueTrackerUrlBase(it) },
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
             )
         }
     }
