@@ -14,6 +14,7 @@ dailysync/
 │       │                   └── ExampleInstrumentedTest.kt
 │       ├── main
 │       │   ├── AndroidManifest.xml
+│       │   ├── ic_launcher-playstore.png
 │       │   ├── java
 │       │   │   └── com
 │       │   │       └── example
@@ -24,6 +25,7 @@ dailysync/
 │       │   │               │   ├── DailyReportRepository.kt
 │       │   │               │   ├── InMemoryDailyReportRepository.kt
 │       │   │               │   ├── RoomDailyReportRepository.kt
+│       │   │               │   ├── UserPreferences.kt
 │       │   │               │   ├── export
 │       │   │               │   │   └── MarkdownDailyReportExporter.kt
 │       │   │               │   ├── local
@@ -48,11 +50,15 @@ dailysync/
 │       │   │               │       ├── CreateDailyReportUseCase.kt
 │       │   │               │       ├── ExportDailyReportsUseCase.kt
 │       │   │               │       ├── FilterDailyReportsUseCase.kt
+│       │   │               │       ├── GetLastDailyReportUseCase.kt
 │       │   │               │       ├── ObserveDailyReportsUseCase.kt
 │       │   │               │       └── ScheduleDailyReminderUseCase.kt
 │       │   │               ├── presentation
 │       │   │               │   ├── DailySyncScreen.kt
-│       │   │               │   └── DailySyncViewModel.kt
+│       │   │               │   ├── DailySyncViewModel.kt
+│       │   │               │   ├── SettingsScreen.kt
+│       │   │               │   └── components
+│       │   │               │       └── MarkdownText.kt
 │       │   │               └── ui
 │       │   │                   └── theme
 │       │   │                       ├── Color.kt
@@ -63,22 +69,28 @@ dailysync/
 │       │       │   ├── ic_launcher_background.xml
 │       │       │   └── ic_launcher_foreground.xml
 │       │       ├── mipmap-anydpi
+│       │       ├── mipmap-anydpi-v26
 │       │       │   ├── ic_launcher.xml
 │       │       │   └── ic_launcher_round.xml
 │       │       ├── mipmap-hdpi
 │       │       │   ├── ic_launcher.webp
+│       │       │   ├── ic_launcher_foreground.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── mipmap-mdpi
 │       │       │   ├── ic_launcher.webp
+│       │       │   ├── ic_launcher_foreground.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── mipmap-xhdpi
 │       │       │   ├── ic_launcher.webp
+│       │       │   ├── ic_launcher_foreground.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── mipmap-xxhdpi
 │       │       │   ├── ic_launcher.webp
+│       │       │   ├── ic_launcher_foreground.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── mipmap-xxxhdpi
 │       │       │   ├── ic_launcher.webp
+│       │       │   ├── ic_launcher_foreground.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── values
 │       │       │   ├── colors.xml
@@ -94,6 +106,10 @@ dailysync/
 │                       └── dailysync
 │                           └── ExampleUnitTest.kt
 ├── build.gradle.kts
+├── docs
+│   └── img
+│       ├── DailySync-Home.png
+│       └── Sunsetlounge-Home.png
 ├── gradle
 │   ├── libs.versions.toml
 │   └── wrapper
@@ -105,5 +121,5 @@ dailysync/
 ├── local.properties
 └── settings.gradle.kts
 
-43 directories, 62 files
+47 directories, 74 files
 ```
