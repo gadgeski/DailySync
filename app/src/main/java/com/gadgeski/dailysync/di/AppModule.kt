@@ -1,4 +1,4 @@
-// app/src/main/java/com/example/dailysync/di/AppModule.kt
+// app/src/main/java/com/gadgeski/dailysync/di/AppModule.kt
 package com.gadgeski.dailysync.di
 
 import android.content.Context

@@ -1,4 +1,4 @@
-// app/src/main/java/com/example/dailysync/presentation/DailySyncScreen.kt
+// app/src/main/java/com/gadgeski/dailysync/presentation/DailySyncScreen.kt
 
 @file:Suppress("ktlint:standard:function-naming")
 @file:OptIn(ExperimentalMaterial3Api::class)
