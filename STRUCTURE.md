@@ -9,7 +9,7 @@ dailysync/
 │       ├── androidTest
 │       │   └── java
 │       │       └── com
-│       │           └── example
+│       │           └── gadgeski
 │       │               └── dailysync
 │       │                   └── ExampleInstrumentedTest.kt
 │       ├── main
@@ -17,7 +17,7 @@ dailysync/
 │       │   ├── ic_launcher-playstore.png
 │       │   ├── java
 │       │   │   └── com
-│       │   │       └── example
+│       │   │       └── gadgeski
 │       │   │           └── dailysync
 │       │   │               ├── DailySyncApplication.kt
 │       │   │               ├── MainActivity.kt
@@ -102,7 +102,7 @@ dailysync/
 │       └── test
 │           └── java
 │               └── com
-│                   └── example
+│                   └── gadgeski
 │                       └── dailysync
 │                           └── ExampleUnitTest.kt
 ├── build.gradle.kts
