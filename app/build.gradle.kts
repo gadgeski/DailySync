@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.dailysync"
+    namespace = "com.gadgeski.dailysync"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.dailysync"
+        applicationId = "com.gadgeski.dailysync"
         minSdk = 34
         targetSdk = 36
         versionCode = 1
